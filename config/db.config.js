@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 // import { createClient } from "redis";
 
 // export const client = createClient({ url: process.env.CACHE_URI });
@@ -11,7 +12,7 @@ import mongoose from "mongoose";
 
 //   await client.connect();
 // }
-
+dotenv.config({path:"./.env"});
 const db_url = process.env.MONGO_URI;
 console.log(db_url)
 export const connectDB = async () => {

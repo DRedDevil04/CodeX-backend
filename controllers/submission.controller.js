@@ -1,12 +1,32 @@
-import Submission from '../models/submission.schema';
+import questionSchema from '../models/question.schema.js';
+import Submission from '../models/submission.schema.js';
+
 
 // Create a new submission
 async function createSubmission(req, res) {
     try {
         const submission = await Submission.create(req.body);
-        return res.status(201).json(submission);
+        const problem = await questionSchema.findOne({id:req.body.question}).populate(question)
+        problem.testCases.map(async (testcase)=>{
+            const resp=await axios.post("https://127.0.0.1:3005/upload/",{
+                myFile: code,
+                input: testcase.input,
+                output:testcase.output
+            })
+            if(resp.data.success && resp.data.opstatus!=="accepted"){
+                submissionScheme=await questionSchema.findByIdAndUpdate(req.params.id,{
+                    result: "Wrong Answer"
+                })
+                res.status(200).json(submissionScheme)
+            }
+            
+        })
+        submissionScheme=await questionSchema.findByIdAndUpdate(req.params.id,{
+            result: "Accepted"
+        })
+        return res.status(201).json(submissionScheme);
     } catch (error) {
-        return res.status(500).json({ error: 'Failed to create submission' });
+        return res.status(500).json({ error });
     }
 }
 

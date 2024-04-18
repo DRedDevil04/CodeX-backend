@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const problemSchema = new mongoose.Schema({
     title: {
@@ -20,11 +20,7 @@ const problemSchema = new mongoose.Schema({
     memoryLimit: {
         type: Number,
         required: true
-    },
-    testCases: [{
-        input: String,
-        output: String
-    }],
+    }
     // Other relevant fields can be added here
 }, {
     timestamps: true // Including timestamps for createdAt and updatedAt

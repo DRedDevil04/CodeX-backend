@@ -1,12 +1,20 @@
-import TestCase from '../models/testcase.schema';
+import TestCase from '../models/testcase.schema.js';
 
 // Create a new test case
 async function createTestCase(req, res) {
     try {
-        const testCase = await TestCase.create(req.body);
-        return res.status(201).json(testCase);
+        
+        const testCase = await TestCase.create({
+            question:req.query.problem,
+            output:req.body.output,
+            input:req.files.input
+        });
+        return res.status(201).send({
+            success:true,
+            testCase
+        });
     } catch (error) {
-        return res.status(500).json({ error: 'Failed to create test case' });
+        return res.status(500).json({ error });
     }
 }
 
@@ -59,4 +67,4 @@ async function deleteTestCase(req, res) {
     }
 }
 
-export { createTestCase, getAllTestCases, getTestCaseById, updateTestCase, deleteTestCase };
+export { createTestCase, getTestCasesByProblem, getTestCaseById, updateTestCase, deleteTestCase };

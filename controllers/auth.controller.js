@@ -1,14 +1,15 @@
 import { comparePassword, hashPassword } from "../helpers/auth.helper.js";
 import userModel from "../models/user.schema.js";
 import JWT from 'jsonwebtoken';
-
+import dotenv from "dotenv";
+dotenv.config();
 export const registerController = async (req,res)=>{
     try {
-        const {name,email,password}=req.body;
+        const {username,email,password}=req.body;
         //validations
-        console.log(name);
+        console.log(username);
         console.log(req.body);
-        if(!name){
+        if(!username){
             return res.send({error:"Name Required"});
         }
         if(!email){
@@ -32,7 +33,7 @@ export const registerController = async (req,res)=>{
         //save 
         
         
-        const user=await new userModel({name,email,password:hashedPassword}).save();
+        const user=await new userModel({username,email,password:hashedPassword}).save();
         res.status(201).send({
 
             success:true,
@@ -42,6 +43,7 @@ export const registerController = async (req,res)=>{
     } catch (error) {
         console.log(error);
         res.status(500).send({
+
             success:true,
             message:"Error in Registration",
         })
@@ -79,8 +81,8 @@ export const loginController=async(req,res)=>{
             success:true,
             message: "Successful Login",
             user:{
-                name:user.name,
-                email:user.name,
+                name:user.username,
+                email:user.email,
             },
             token,
         })

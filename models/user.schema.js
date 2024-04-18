@@ -15,14 +15,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    submissions: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Submission'
-    }],
     currentPoints: {
         type: Number,
         default: 0
+    },
+    role:{
+        type:Number,
+        default:0
     }
+
     // Other relevant fields can be added here
 }, {
     timestamps: true // Including timestamps for createdAt and updatedAt

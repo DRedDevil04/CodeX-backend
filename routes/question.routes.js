@@ -1,7 +1,7 @@
 import express from "express";
-import { createProblem, deleteProblem, getAllProblems, updateProblem } from "../controllers/question.controller";
-import { isAdmin, requireSignIn } from "../middlewares/auth.middleware";
-import { validateProblem } from "../middlewares/problem.middleware";
+import { createProblem, deleteProblem, getAllProblems, updateProblem } from "../controllers/question.controller.js";
+import { isAdmin, requireSignIn } from "../middlewares/auth.middleware.js";
+import { validateProblem } from "../middlewares/problem.middleware.js";
 
 const router = express.Router();
 

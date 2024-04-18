@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const testCaseSchema = new mongoose.Schema({
-    problem: {
+    question: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question',
-        required: true
+        required:true
     },
     input: {
-        type: String,
-        required: true
+        data: Buffer,
+        contentType:String,
     },
     output: {
         type: String,

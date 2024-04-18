@@ -1,4 +1,4 @@
-import Problem from "../models/question.schema"
+import Problem from "../models/question.schema.js"
 
 // Create a new problem
 async function createProblem(req, res) {
