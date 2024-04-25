@@ -9,3 +9,5 @@ async function getLeaderboard(req,res){
         leaderboard
     })
 }
+
+export {getLeaderboard}
