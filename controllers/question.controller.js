@@ -4,9 +4,9 @@ import Problem from "../models/question.schema.js";
 async function createProblem(req, res) {
   try {
     const problem = await Problem.create(req.body);
-    return res.status(201).json(problem);
+    return res.status(201).json({success:true,problem});
   } catch (error) {
-    return res.status(500).json({ error: "Failed to create problem" });
+    return res.status(500).json({success:false, error: "Failed to create problem" });
   }
 }
 
