@@ -3,10 +3,18 @@ import Contest from "../models/contest.schema.js";
 // Create a new contest
 async function createContest(req, res) {
   try {
-    const contest = await Contest.create(req.body);
+    const contestOb={
+      ...req.body,
+      date:new Date(req.body.date),
+      startTime:new Date(req.body.startTime + " " + req.body.date),
+      endTime: new Date(req.body.endTime + " " + req.body.date),
+      
+    }
+    const contest = await Contest.create(contestOb);
     return res.status(201).json(contest);
   } catch (error) {
-    return res.status(500).json({ error: "Failed to create contest" });
+    JSON.stringify(error);
+    return res.status(500).json({ error: "Failed to create contest",error});
   }
 }
 

@@ -8,7 +8,7 @@ const contestSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
+      // required: true,
     },
     guidelines: {
       type: String,
