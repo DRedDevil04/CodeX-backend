@@ -1,9 +1,9 @@
 const validateProblem = async (req, res, next) => {
   try {
-    const { title, description, difficulty, timeLimit, memoryLimit } = req.body;
+    const { title, description, difficulty, timeLimit, memoryLimit , points} = req.body;
 
     // Check if all required fields are present
-    if (!title || !description || !difficulty || !timeLimit || !memoryLimit) {
+    if (!title || !description || !difficulty || !timeLimit || !memoryLimit || !points) {
       return res.status(400).json({ error: "All fields are required" });
     }
 

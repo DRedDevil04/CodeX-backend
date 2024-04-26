@@ -4,7 +4,7 @@ import TestCase from "../models/testcase.schema.js";
 async function createTestCase(req, res) {
   try {
     const testCase = await TestCase.create({
-      question: req.query.problem,
+      question: req.body.problem,
       output: req.body.output,
       input: req.files.input,
     });

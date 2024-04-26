@@ -2,6 +2,7 @@ import axios from "axios";
 import questionSchema from "../models/question.schema.js";
 import Submission from "../models/submission.schema.js";
 import testcaseSchema from "../models/testcase.schema.js";
+import userSchema from "../models/user.schema.js";
 
 // Create a new submission
 async function createSubmission(req, res) {
@@ -36,8 +37,9 @@ async function createSubmission(req, res) {
         }
       })
     );
-
+    
     if (flag == 0) {
+
       const submissionScheme = await Submission.findByIdAndUpdate(
         submission.id,
         {
@@ -45,6 +47,12 @@ async function createSubmission(req, res) {
         },
         { new: true }
       );
+      const correctSubmissions= await Submission.find({problem:req.body.problem, user: req.user._id})
+      if(correctSubmissions.length==1){
+        const user= await userSchema.findByIdAndUpdate(req.user._id,{
+          $inc: { currentPoints: problem.points }
+        })
+      }
       return res.status(201).json(submissionScheme);
     } else {
       const submissionScheme = await Submission.findByIdAndUpdate(

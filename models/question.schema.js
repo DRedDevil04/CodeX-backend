@@ -20,6 +20,10 @@ const problemSchema = new mongoose.Schema({
     memoryLimit: {
         type: Number,
         required: true
+    },
+    points:{
+        type:Number,
+        required:true
     }
     // Other relevant fields can be added here
 }, {
