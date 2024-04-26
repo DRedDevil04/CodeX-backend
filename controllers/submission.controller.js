@@ -72,9 +72,10 @@ async function createSubmission(req, res) {
 // Get all submissions
 async function getAllSubmissions(req, res) {
   try {
-    const submissions = await Submission.find().populate(['user','question']);
+    const submissions = await Submission.find().populate(['user','problem']);
     return res.status(200).json(submissions);
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: "Failed to fetch submissions" });
   }
 }
