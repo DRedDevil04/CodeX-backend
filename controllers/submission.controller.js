@@ -3,67 +3,26 @@ import questionSchema from "../models/question.schema.js";
 import Submission from "../models/submission.schema.js";
 import testcaseSchema from "../models/testcase.schema.js";
 import userSchema from "../models/user.schema.js";
-
+import { submissionQueue } from "../utils/submissionQueue.util.js";
 // Create a new submission
 async function createSubmission(req, res) {
   try {
     const code = req.files.code;
+    console.log(code);
     const submission = await Submission.create({
       ...req.body,
       user: req.user._id,
     });
-    const problem = await questionSchema.findOne({ id: req.body.problem });
-    const testCases = await testcaseSchema.find({ question: req.body.problem });
-    let flag = 0;
-    await Promise.all(
-      testCases.map(async (testcase) => {
-        var formData = new FormData();
-        const codeBlob = new Blob([code.data]);
-        const blob = new Blob([testcase.input.data]);
-        formData.append("files", codeBlob);
-        formData.append("input", blob);
-        formData.append("output", testcase.output);
-        const resp = await axios.post(
-          "http://localhost:3005/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        if (resp.data.success && resp.data.opstatus !== "accepted") {
-          flag = 1;
-        }
-      })
-    );
-    
-    if (flag == 0) {
-
-      const submissionScheme = await Submission.findByIdAndUpdate(
-        submission.id,
-        {
-          result: "Accepted",
-        },
-        { new: true }
-      );
-      const correctSubmissions= await Submission.find({problem:req.body.problem, user: req.user._id})
-      if(correctSubmissions.length==1){
-        const user= await userSchema.findByIdAndUpdate(req.user._id,{
-          $inc: { currentPoints: problem.points }
-        })
-      }
-      return res.status(201).json(submissionScheme);
-    } else {
-      const submissionScheme = await Submission.findByIdAndUpdate(
-        submission.id,
-        {
-          result: "Wrong Answer",
-        },
-        { new: true }
-      );
-      return res.status(201).json(submissionScheme);
-    }
+    await submissionQueue.add({
+      code: code,
+      submission: submission,
+      problem: req.body.problem,
+      userid: req.user._id,
+    });
+    return res.status(201).send({
+      status: true,
+      submission,
+    });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -72,10 +31,10 @@ async function createSubmission(req, res) {
 // Get all submissions
 async function getAllSubmissions(req, res) {
   try {
-    const submissions = await Submission.find().populate(['user','problem']);
+    const submissions = await Submission.find().populate(["user", "problem"]);
     return res.status(200).json(submissions);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({ error: "Failed to fetch submissions" });
   }
 }
