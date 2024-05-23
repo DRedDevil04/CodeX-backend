@@ -5,7 +5,7 @@ import testcaseSchema from "../models/testcase.schema.js";
 import axios from "axios";
 const submissionQueue = new Queue("submissionQueue", {
   redis: {
-    host: "127.0.0.1",
+    host: "cache",
     port: 6379,
   },
 });
@@ -33,7 +33,7 @@ submissionQueue.process(async (job, done) => {
         formData.append("input", blob);
         formData.append("output", testcase.output);
         const resp = await axios.post(
-          "http://localhost:3005/upload",
+          "http://judge:3005/upload",
           formData,
           {
             headers: {
