@@ -41,6 +41,7 @@ submissionQueue.process(async (job, done) => {
             },
           }
         );
+        console.log(resp)
         if (resp.data.success && resp.data.opstatus !== "accepted") {
           flag = 1;
         }
